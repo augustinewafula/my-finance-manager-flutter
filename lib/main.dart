@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:telephony/telephony.dart';
 
+import 'helpers/database_helper.dart';
+import 'models/sms.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -8,7 +11,22 @@ void main() {
 const validAddresses = ['MPESA', '+254720810670'];
 
 void handleSms(SmsMessage smsMessage) async {
-  if (validAddresses.contains(smsMessage.address)) {}
+  if (validAddresses.contains(smsMessage.address)) {
+    saveSmsToLocalDatabase(smsMessage.body);
+  }
+}
+
+void saveSmsToLocalDatabase(String? body) async {
+  if (body == null) {
+    return;
+  }
+  var sms = Sms(id: 0, body: body, synced: 0);
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  await databaseHelper.insertSms(sms);
+
+  var savedSms = await databaseHelper.getSms();
+  print(savedSms);
 }
 
 class MyApp extends StatelessWidget {

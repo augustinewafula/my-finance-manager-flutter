@@ -1,0 +1,5 @@
+class SyncSmsService {
+  void init() {
+    //
+  }
+}
