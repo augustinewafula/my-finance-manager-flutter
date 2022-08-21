@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_finance_manager/config/routes/routes.dart';
 import 'package:telephony/telephony.dart';
 
 import 'helpers/database_helper.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      routes: routes(),
       home: const MyHomePage(title: 'Home'),
     );
   }
@@ -102,6 +104,13 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamed("/screens.sign_in");
+              },
+              child: const Text("TEXT BUTTON"),
+            )
           ],
         ),
       ),
