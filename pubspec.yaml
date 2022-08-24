@@ -39,6 +39,7 @@ dependencies:
   path:
   simple_animations: ^5.0.0+2
   shared_preferences: ^2.0.15
+  flutter_svg: any
 
 dev_dependencies:
   flutter_test:

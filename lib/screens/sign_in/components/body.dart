@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
 import '../../../config/constants.dart';
 
 class Body extends StatefulWidget {
@@ -180,12 +181,13 @@ class _BodyState extends State<Body> {
                   const SizedBox(
                     height: 30,
                   ),
+                  FormError(key: UniqueKey(), errors: errors),
                   DefaultButton(
                     text: "Login",
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState?.save();
-                        Navigator.pushNamed(context, '/home');
+                        Navigator.pushNamed(context, '/screens.home');
                       }
                     },
                     key: UniqueKey(),
