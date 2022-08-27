@@ -40,6 +40,10 @@ dependencies:
   simple_animations: ^5.0.0+2
   shared_preferences: ^2.0.15
   flutter_svg: any
+  http: ^0.13.0
+  http_interceptor: ^1.0.2
+  flutter_easyloading: ^3.0.0
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +54,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,6 +70,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

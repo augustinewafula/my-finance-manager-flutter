@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_finance_manager/config/routes/routes.dart';
 
-void main() {
+Future main() async {
   runApp(const MyApp());
+  await dotenv.load();
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity),
       routes: routes(),
       initialRoute: '/screens.home',
+      builder: EasyLoading.init(),
     );
   }
 }

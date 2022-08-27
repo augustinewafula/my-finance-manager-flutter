@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../config/constants.dart';
+import '../../../services/auth.dart';
+import '../../../services/rest_api_service.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -33,6 +39,48 @@ class _BodyState extends State<Body> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  void submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      EasyLoading.show();
+      errors = [];
+      Response response = await login(email, password);
+      var message;
+      try {
+        message = json.decode(response.body);
+      } on Exception {
+        errors.add("Server error, please retry later.");
+        EasyLoading.dismiss();
+
+        return;
+      }
+      if (response.statusCode == 200) {
+        setAuthToken(message['token']);
+        setEmail(email);
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/screens.home", (route) => false);
+      } else if (response.statusCode == 422) {
+        try {
+          var responseErrors = message['errors'];
+          setState(() {
+            responseErrors.forEach((name, description) {
+              errors.add(description[0]);
+            });
+          });
+        } catch (e) {
+          setState(() {
+            errors.add("Something went wrong.");
+          });
+        }
+      } else {
+        setState(() {
+          errors.add("Server error.");
+        });
+      }
+      EasyLoading.dismiss();
     }
   }
 
@@ -184,12 +232,7 @@ class _BodyState extends State<Body> {
                   FormError(key: UniqueKey(), errors: errors),
                   DefaultButton(
                     text: "Login",
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState?.save();
-                        Navigator.pushNamed(context, '/screens.home');
-                      }
-                    },
+                    onPressed: submitForm,
                     key: UniqueKey(),
                   ),
                   const SizedBox(
