@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_finance_manager/services/sync_sms_service.dart';
 import 'package:telephony/telephony.dart';
 
 import '../../../config/size_config.dart';
@@ -13,18 +14,26 @@ class HomeScreen extends StatelessWidget {
 
   void handleSms(SmsMessage smsMessage) async {
     if (validAddresses.contains(smsMessage.address)) {
-      saveSmsToLocalDatabase(smsMessage.body);
+      DatabaseHelper databaseHelper = DatabaseHelper();
+
+      Sms sms =
+          await saveSmsToLocalDatabase(smsMessage.body ?? '', databaseHelper);
+
+      //TODO: Check if internet is available first
+      SyncSmsService smsService = SyncSmsService();
+      smsService.uploadSms(sms, databaseHelper);
+      smsService.deleteSyncedSms(databaseHelper);
     }
   }
 
-  void saveSmsToLocalDatabase(String? body) async {
-    if (body == null) {
-      return;
-    }
-    var sms = Sms(id: 0, body: body, synced: 0);
+  Future<Sms> saveSmsToLocalDatabase(
+      String body, DatabaseHelper databaseHelper) async {
+    int id = DateTime.now().millisecondsSinceEpoch;
+    Sms sms = Sms(id: id, body: body, synced: 0);
 
-    DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.insertSms(sms);
+
+    return sms;
   }
 
   void requestPermissions() async {

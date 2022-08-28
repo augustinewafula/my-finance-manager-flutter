@@ -48,3 +48,11 @@ Future<Response> login(String email, String password) async {
       await http.post(url, body: body, headers: RestApiService.headers);
   return response;
 }
+
+Future<Response> mpesaTransaction(String message) async {
+  var url = Uri.parse('${baseUrl!}mpesa-transaction');
+  String body = '{"message": "$message"}';
+  var response =
+      await http.post(url, body: body, headers: RestApiService.headers);
+  return response;
+}

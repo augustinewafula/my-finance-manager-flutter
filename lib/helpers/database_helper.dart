@@ -46,6 +46,20 @@ class DatabaseHelper {
     });
   }
 
+  Future<List<Sms>> searchSms(
+      {required String column, required String value}) async {
+    Database db = await _initDatabase();
+    final List<Map<String, dynamic>> maps =
+        await db.query(table, where: '$column = ?', whereArgs: [value]);
+    return List.generate(maps.length, (i) {
+      return Sms(
+        id: maps[i][columnId],
+        body: maps[i][columnBody],
+        synced: maps[i][columnSynced],
+      );
+    });
+  }
+
   Future<int> updateSms(Sms sms) async {
     Database db = await _initDatabase();
     return await db.update(table, sms.toMap(),
