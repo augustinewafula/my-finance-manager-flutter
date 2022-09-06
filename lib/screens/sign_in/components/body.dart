@@ -8,6 +8,7 @@ import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../config/constants.dart';
 import '../../../services/auth.dart';
+import '../../../services/network_status.dart';
 import '../../../services/rest_api_service.dart';
 
 class Body extends StatefulWidget {
@@ -45,6 +46,12 @@ class _BodyState extends State<Body> {
   void submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
+      bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
+      if (!isInternetAvailable) {
+        EasyLoading.showError('No internet connection');
+        return;
+      }
+
       EasyLoading.show();
       errors = [];
       Response response = await login(email, password);

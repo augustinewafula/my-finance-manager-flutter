@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_finance_manager/config/routes/routes.dart';
 import 'package:my_finance_manager/screens/home/home_screen.dart';
 import 'package:my_finance_manager/services/auth.dart';
+import 'package:my_finance_manager/services/network_status.dart';
 import 'package:my_finance_manager/services/sync_sms_service.dart';
 import 'package:telephony/telephony.dart';
 
@@ -31,10 +32,13 @@ void handleSms(SmsMessage smsMessage) async {
         await saveSmsToLocalDatabase(smsMessage.body ?? '', databaseHelper);
     print('sms id ${sms.id} saved to local database');
     await dotenv.load();
-    //TODO: Check if internet is available first
-    SyncSmsService smsService = SyncSmsService();
-    smsService.uploadSms(sms, databaseHelper);
-    smsService.deleteSyncedSms(databaseHelper);
+
+    bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
+    if (isInternetAvailable) {
+      SyncSmsService smsService = SyncSmsService();
+      smsService.uploadSms(sms, databaseHelper);
+      smsService.deleteSyncedSms(databaseHelper);
+    }
   }
 }
 
