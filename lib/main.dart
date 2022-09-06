@@ -24,17 +24,16 @@ class MyApp extends StatefulWidget {
 }
 
 void handleSms(SmsMessage smsMessage) async {
-  print('received sms from ${smsMessage.address}');
   if (HomeScreen.validAddresses.contains(smsMessage.address)) {
     DatabaseHelper databaseHelper = DatabaseHelper();
 
     Sms sms =
         await saveSmsToLocalDatabase(smsMessage.body ?? '', databaseHelper);
-    print('sms id ${sms.id} saved to local database');
     await dotenv.load();
 
     bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
-    if (isInternetAvailable) {
+    bool isUserLoggedIn = await isAuthenticated();
+    if (isInternetAvailable && isUserLoggedIn) {
       SyncSmsService smsService = SyncSmsService();
       smsService.uploadSms(sms, databaseHelper);
       smsService.deleteSyncedSms(databaseHelper);
@@ -55,7 +54,10 @@ Future<Sms> saveSmsToLocalDatabase(
 void requestPermissions() async {
   Telephony telephony = Telephony.instance;
 
-  bool? permissionsGranted = await telephony.requestSmsPermissions;
+  bool? permissionsGranted = await telephony.requestSmsPermissions ?? false;
+  if (permissionsGranted) {
+    registerSmsListener();
+  }
 }
 
 void registerSmsListener() {
@@ -71,11 +73,7 @@ void registerSmsListener() {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    print('init state');
     requestPermissions();
-    registerSmsListener();
-    print('Token: ${getAuthToken()}');
-    print('Email: ${getEmail()}');
     super.initState();
   }
 
