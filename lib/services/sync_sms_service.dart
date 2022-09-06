@@ -20,8 +20,8 @@ class SyncSmsService {
 
   Future<void> uploadSms(sms, DatabaseHelper databaseHelper) async {
     Response response = await mpesaTransaction(sms.body);
-    sms.synced = 1;
     if (response.statusCode == 201) {
+      sms.synced = 1;
       await databaseHelper.updateSms(sms);
     }
   }

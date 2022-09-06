@@ -1,34 +1,34 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'rest_api_service.dart';
-
 class Auth {
-  static String authToken = '';
-  static String email = '';
-
   Future<void> init() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    authToken = sharedPreferences.getString('authToken')!;
-    email = sharedPreferences.getString('email')!;
+    String authToken = sharedPreferences.getString('authToken')!;
+    String email = sharedPreferences.getString('email')!;
     if (authToken.isEmpty) {
       sharedPreferences.setString('authToken', "");
     }
     if (email.isEmpty) {
       sharedPreferences.setString('email', "");
     }
-    RestApiService().init();
   }
 }
 
-String getAuthToken() {
-  if (Auth.authToken.isEmpty) {
+Future<String> getAuthToken() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String authToken = sharedPreferences.getString('authToken')!;
+  if (authToken.isEmpty) {
     return '';
   }
-  return Auth.authToken;
+
+  return authToken;
 }
 
-String getEmail() {
-  return Auth.email;
+Future<String> getEmail() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String email = sharedPreferences.getString('email')!;
+
+  return email;
 }
 
 Future<void> setAuthToken(String token) async {
@@ -41,8 +41,11 @@ Future<void> setEmail(String email) async {
   sharedPreferences.setString('email', email);
 }
 
-bool isAuthenticated() {
-  return getAuthToken().isNotEmpty ? true : false;
+Future<bool> isAuthenticated() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String authToken = sharedPreferences.getString('authToken')!;
+
+  return authToken.isNotEmpty ? true : false;
 }
 
 Future<bool> clearAuthSharedPreferences() async {

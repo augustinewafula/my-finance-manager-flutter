@@ -1,7 +1,7 @@
 class Sms {
   final int id;
   final String body;
-  final int synced;
+  int synced;
 
   Sms({required this.id, required this.body, required this.synced});
 
@@ -11,6 +11,10 @@ class Sms {
       'body': body,
       'synced': synced,
     };
+  }
+
+  set setSynced(int synced) {
+    this.synced = synced;
   }
 
   @override

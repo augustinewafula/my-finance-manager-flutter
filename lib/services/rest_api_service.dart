@@ -10,11 +10,12 @@ import 'navigation_service.dart';
 class RestApiService {
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    'Accept': 'application/json'
   };
 
-  void init() {
-    headers["Authorization"] = "Bearer ${getAuthToken()}";
+  Future<void> appendAuthToken() async {
+    String token = await getAuthToken();
+    headers['Authorization'] = 'Bearer $token';
   }
 }
 
@@ -50,6 +51,7 @@ Future<Response> login(String email, String password) async {
 }
 
 Future<Response> mpesaTransaction(String message) async {
+  await RestApiService().appendAuthToken();
   var url = Uri.parse('${baseUrl!}mpesa-transaction');
   String body = '{"message": "$message"}';
   var response =
