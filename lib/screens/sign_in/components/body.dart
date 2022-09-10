@@ -45,6 +45,7 @@ class _BodyState extends State<Body> {
 
   void submitForm() async {
     if (_formKey.currentState!.validate()) {
+      EasyLoading.show();
       _formKey.currentState?.save();
       bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
       if (!isInternetAvailable) {
@@ -52,7 +53,6 @@ class _BodyState extends State<Body> {
         return;
       }
 
-      EasyLoading.show();
       errors = [];
       Response response = await login(email, password);
       var message;
