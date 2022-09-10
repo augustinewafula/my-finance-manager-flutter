@@ -2,17 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_finance_manager/config/routes/routes.dart';
-import 'package:my_finance_manager/screens/home/home_screen.dart';
 import 'package:my_finance_manager/services/auth.dart';
 import 'package:my_finance_manager/services/network_status.dart';
 import 'package:my_finance_manager/services/sync_sms_service.dart';
 import 'package:telephony/telephony.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'helpers/database_helper.dart';
 import 'models/sms.dart';
 
+const validAddresses = ['MPESA', '+254720810670'];
+
+void callbackDispatcher() async {
+  Workmanager().executeTask((task, inputData) async {
+    bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
+    bool isUserLoggedIn = await isAuthenticated();
+    if (isInternetAvailable && isUserLoggedIn) {
+      await SyncSmsService().init();
+    }
+    return Future.value(true);
+  });
+}
+
 Future main() async {
   await dotenv.load();
+  Workmanager().initialize(
+      callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode: true);
+  Workmanager().registerPeriodicTask(
+      "auto-sync-sms-identifier", "autoSyncSmsTask",
+      frequency: const Duration(hours: 1));
   runApp(const MyApp());
 }
 
@@ -23,8 +42,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+void syncSms() {}
+
 void handleSms(SmsMessage smsMessage) async {
-  if (HomeScreen.validAddresses.contains(smsMessage.address)) {
+  if (validAddresses.contains(smsMessage.address)) {
     DatabaseHelper databaseHelper = DatabaseHelper();
 
     Sms sms =

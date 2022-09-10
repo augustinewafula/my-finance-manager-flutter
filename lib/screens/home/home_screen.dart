@@ -7,8 +7,6 @@ import 'components/body.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  static const validAddresses = ['MPESA', '+254720810670'];
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
