@@ -1,4 +1,6 @@
+import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_finance_manager/config/routes/routes.dart';
@@ -94,10 +96,21 @@ void registerSmsListener() {
       onBackgroundMessage: handleSms);
 }
 
+Future<void> initAutoStart() async {
+  try {
+    bool? isAutostartAvailable = await isAutoStartAvailable;
+    if (isAutostartAvailable ?? false) await getAutoStartPermission();
+  } on PlatformException catch (e) {
+    print(e);
+  }
+  return;
+}
+
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     requestPermissions();
+    initAutoStart();
     super.initState();
   }
 

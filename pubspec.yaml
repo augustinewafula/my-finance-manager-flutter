@@ -45,6 +45,7 @@ dependencies:
   flutter_easyloading: ^3.0.0
   flutter_dotenv: ^5.0.2
   workmanager: ^0.5.0
+  auto_start_flutter: ^0.1.1
 
 dev_dependencies:
   flutter_test:
