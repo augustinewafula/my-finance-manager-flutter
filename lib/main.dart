@@ -32,8 +32,7 @@ void callbackDispatcher() async {
 Future main() async {
   await dotenv.load();
   Workmanager().initialize(
-      callbackDispatcher, // The top level function, aka callbackDispatcher
-      isInDebugMode: true);
+      callbackDispatcher);
   Workmanager().registerPeriodicTask(
       "auto-sync-sms-identifier", "autoSyncSmsTask",
       frequency: const Duration(hours: 1));
