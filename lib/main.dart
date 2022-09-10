@@ -15,10 +15,15 @@ const validAddresses = ['MPESA', '+254720810670'];
 
 void callbackDispatcher() async {
   Workmanager().executeTask((task, inputData) async {
-    bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
-    bool isUserLoggedIn = await isAuthenticated();
-    if (isInternetAvailable && isUserLoggedIn) {
-      await SyncSmsService().init();
+    try {
+      await dotenv.load();
+      bool isInternetAvailable = await NetworkStatus().isInternetAvailable();
+      bool isUserLoggedIn = await isAuthenticated();
+      if (isInternetAvailable && isUserLoggedIn) {
+        await SyncSmsService().init();
+      }
+    } catch (err) {
+      throw Exception(err);
     }
     return Future.value(true);
   });
