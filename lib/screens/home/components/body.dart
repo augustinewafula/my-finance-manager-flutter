@@ -30,7 +30,7 @@ class _BodyState extends State<Body> {
               Navigator.of(context, rootNavigator: true)
                   .pushNamed("/screens.sign_in");
             },
-            child: const Text("TEXT BUTTON"),
+            child: const Text("LOGIN"),
           )
         ]));
   }
