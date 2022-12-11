@@ -52,7 +52,7 @@ Future<Response> login(String email, String password) async {
 
 Future<Response> mpesaTransaction(String message) async {
   await RestApiService().appendAuthToken();
-  var url = Uri.parse('${baseUrl!}transaction');
+  var url = Uri.parse('${baseUrl!}mpesa-transaction');
   String body = '{"message": "$message"}';
   var response =
       await http.post(url, body: body, headers: RestApiService.headers);
