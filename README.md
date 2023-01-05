@@ -1,16 +1,22 @@
-# my_finance_manager
+# My finance Manager Backend
+This is an application built using the Flutter that helps individuals manage their personal finance. It allows users to track their spending and saving habits, set budgets, and connect to their M-pesa account to automatically capture and record transactions.
 
-Manage personal finance.
+**Note: This project is still in development and not yet ready for production use.**
 
-## Getting Started
+## Features
+* Connect to M-pesa to automatically capture and record transactions
+* Set and track budgets
+* Generate reports on spending and income
+* Plan and achieve financial goals
+* Get alerts for upcoming bills and payments
+* Track spending and saving habits
 
-This project is a starting point for a Flutter application.
+## Requirements
+* Flutter 1.0 or higher
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+* Clone the repo ` git clone https://github.com/augustinewafula/my-finance-manager-flutter `
+* `cd my-finance-manager-flutter` to project folder.
+* Run ` flutter pub get `
+* Connect your device to your computer and run `flutter run`.
+* Done !!!
